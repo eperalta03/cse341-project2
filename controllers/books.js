@@ -1,6 +1,7 @@
 const mongodb = require('../data/database');
 
 const getAllBooks = async (req, res) => {
+    //#swagger.tags=['Books']
     const result = await mongodb.getDatabase().db().collection('books').find();
     result.toArray().then((books) => {
         res.setHeader('Content-Type', 'application/json');
@@ -9,6 +10,7 @@ const getAllBooks = async (req, res) => {
 };
 
 const getSingle = async(req, res) => {
+    //#swagger.tags=['Books']
     const bookId = req.params.id;
     const result = await mongodb.getDatabase().db().collection('books').find({_id: bookId});
     result.toArray().then((books) => {
@@ -18,6 +20,7 @@ const getSingle = async(req, res) => {
 }
 
 const insertBook = async (req, res) => {
+    //#swagger.tags=['Books']
   try {
     const book = {
       _id: req.body._id,
@@ -42,6 +45,7 @@ const insertBook = async (req, res) => {
 };
 
 const updateBook = async(req, res) => {
+    //#swagger.tags=['Books']
     const bookId = req.params.id;
     const book = {
         title: req.body.title,
@@ -58,6 +62,7 @@ const updateBook = async(req, res) => {
 };
 
 const deleteBook = async(req, res) => {
+    //#swagger.tags=['Books']
     const bookId = req.params.id;
     const result = await mongodb.getDatabase().db().collection('books').deleteOne({_id: bookId});
     if (result.deletedCount > 0) {
