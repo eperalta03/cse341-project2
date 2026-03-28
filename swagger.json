@@ -5,7 +5,7 @@
     "description": "Books API",
     "version": "1.0.0"
   },
-  "host": "localhost:3500",
+  "host": "cse341-project2-t4t0.onrender.com",
   "basePath": "/",
   "schemes": [
     "https"
