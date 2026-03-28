@@ -1,32 +1,51 @@
 const mongodb = require('../data/database');
 
 const getAllBooks = async (req, res) => {
-    //#swagger.tags=['Books']
-    const result = await mongodb.getDatabase().db().collection('books').find();
-    result.toArray((err, books) => {
-        if (err) {
-            res.status(400).json({message: err});
-        }
-        res.setHeader('Content-Type', 'application/json');
-        res.status(200).json(books)
-    });
+  //#swagger.tags=['Books']
+  try {
+    const result = await mongodb
+      .getDatabase()
+      .db()
+      .collection('books')
+      .find()
+      .toArray(); 
+
+    res.setHeader('Content-Type', 'application/json');
+    res.status(200).json(result);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: err.message });
+  }
 };
 
-const getSingle = async(req, res) => {
+const getSingle = async (req, res) => {
     //#swagger.tags=['Books']
-    if (!req.params.id) {
+
+    const bookId = req.params.id;
+
+    if (!/^\d{10}(\d{3})?$/.test(bookId)) {
         return res.status(400).json('Must use a valid ISBN to find a book.');
     }
-    const bookId = req.params.id;
-    const result = await mongodb.getDatabase().db().collection('books').find({_id: bookId});
-    result.toArray((err, books) => {
-        if (err) {
-            res.status(400).json({message: err});
+
+    try {
+        const book = await mongodb
+        .getDatabase()
+        .db()
+        .collection('books')
+        .findOne({ _id: bookId });
+
+        if (!book) {
+        return res.status(404).json({ message: "Book not found" });
         }
-        res.setHeader('Content-Type', 'application/json');
-        res.status(200).json(books)
-    });
-}
+
+        res.status(200).json(book);
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: err.message });
+    }
+};
 
 const insertBook = async (req, res) => {
     //#swagger.tags=['Books']
