@@ -74,10 +74,11 @@ const insertBook = async (req, res) => {
 
 const updateBook = async(req, res) => {
     //#swagger.tags=['Books']
-    if (!req.params.id) {
+    const bookId = req.params.id;
+
+    if (!/^\d{10}(\d{3})?$/.test(bookId)) {
         return res.status(400).json('Must use a valid ISBN to find a book.');
     }
-    const bookId = req.params.id;
     const book = {
         title: req.body.title,
         author: req.body.author,
@@ -94,10 +95,11 @@ const updateBook = async(req, res) => {
 
 const deleteBook = async(req, res) => {
     //#swagger.tags=['Books']
-    if (!req.params.id) {
+    const bookId = req.params.id;
+
+    if (!/^\d{10}(\d{3})?$/.test(bookId)) {
         return res.status(400).json('Must use a valid ISBN to find a book.');
     }
-    const bookId = req.params.id;
     const result = await mongodb.getDatabase().db().collection('books').deleteOne({_id: bookId});
     if (result.deletedCount > 0) {
         res.status(201).json("Book deleted successfully");
