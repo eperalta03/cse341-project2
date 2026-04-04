@@ -9,4 +9,6 @@ router.get('/', (req, res) => {
 
 router.use('/books', require('./books'));
 
+router.use('/students', require('./students'));
+
 module.exports = router
